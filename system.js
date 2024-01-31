@@ -4,7 +4,7 @@ class User {
         this.password = password;
         this.registerDate = registerDate;
         this.email = email;
-        this.name = name;
+        this.name = this.name;
     }
 
     logIn() {
@@ -38,7 +38,7 @@ class Tutor extends User {
     }
 
     updateCourse(courseId, newContent) {
-        const course = this.courses.find(courseId);
+        const course = this.findCourse(courseId);
 
         if (course) {
             course.updateContent (newContent);
@@ -51,7 +51,7 @@ class Tutor extends User {
     }
 
     findCourse(courseId) {
-        return this.courses.find((course) => course.id === courseId);
+        return this.courses.find(course => course.title === courseId);
     }
 }
 
@@ -61,7 +61,7 @@ class Student extends User {
 
     this.subscriptions = [];
     this.cart = [];
-    thiss.activeCoupon = null;
+    this.activeCoupon = null;
     }
 
     addToCart(course) {
@@ -110,7 +110,7 @@ class Student extends User {
 
     this.cart = [];
 }
-    activeSubscripton() {
+    activeSubscription() {
         console.log('Your active subscriptions:');
 
         for (const course of this.subscriptions) {
@@ -120,8 +120,7 @@ class Student extends User {
 }
 
 class Course {
-    constructor (id, title, content) {
-        this.id = id;
+    constructor (title, content) {
         this.title = title;
         this.content = content;
     }
@@ -139,3 +138,18 @@ class Coupon {
 }
 
 //Example
+const tutor = new Tutor('Emeka Seven', 'Seven@mail.com', 'password');
+const student = new Student('Victor Ubahakwe', 'Victor@mail.com', 'password');
+const coupon = new Coupon('JANUARY2024', 100); //100% discount
+
+tutor.logIn();
+tutor.createCourse(new Course(1, 'Backend for beginners', 'content'));
+tutor.createCourse(new Course(2, 'Devops fundamentals', 'content'))
+tutor.updateCourse(1, 'updated content');
+
+student.logIn();
+student.addActiveCoupon(coupon);
+student.addToCart(new Course(2, 'devops fundamentals', 'content'));
+student.addToCart(new Course(1, 'Backend basics', 'content'));
+student.checkout();
+student.activeSubscription();
