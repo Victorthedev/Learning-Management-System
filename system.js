@@ -1,10 +1,10 @@
 class User {
-    constructor (userId, password, registerDate, email) {
+    constructor (userId, password, registerDate, email, name) {
         this.userId = userId;
         this.password = password;
         this.registerDate = registerDate;
         this.email = email;
-        this.name = this.name;
+        this.name = name;
     }
 
     logIn() {
@@ -26,9 +26,10 @@ class User {
 
 class Tutor extends User {
     constructor(name, email, password) {
-    super(name, email, password);
+    super(undefined, password, undefined, email, name);
 
     this.courses = [];
+    this.logIn();
     }
 
     createCourse(course) {
@@ -57,11 +58,12 @@ class Tutor extends User {
 
 class Student extends User {
     constructor (name, email, password) {
-    super(name, email, password);
+    super(undefined, password, undefined, email, name);
 
     this.subscriptions = [];
     this.cart = [];
     this.activeCoupon = null;
+    this.logIn();
     }
 
     addToCart(course) {
@@ -113,8 +115,8 @@ class Student extends User {
     activeSubscription() {
         console.log('Your active subscriptions:');
 
-        for (const course of this.subscriptions) {
-            console.log(`- ${course.title}`);
+        for (const subscription of this.subscriptions) {
+            console.log(`- ${subscription.course.title}`);
         }
     }
 }
@@ -143,13 +145,13 @@ const student = new Student('Victor Ubahakwe', 'Victor@mail.com', 'password');
 const coupon = new Coupon('JANUARY2024', 100); //100% discount
 
 tutor.logIn();
-tutor.createCourse(new Course(1, 'Backend for beginners', 'content'));
-tutor.createCourse(new Course(2, 'Devops fundamentals', 'content'))
-tutor.updateCourse(1, 'updated content');
+tutor.createCourse(new Course('Backend basics', 'Backend for beginners'));
+tutor.createCourse(new Course('Devops fundamentals', 'Devops fundamentals'))
+tutor.updateCourse('Backend basics', 'updated content');
 
 student.logIn();
 student.addActiveCoupon(coupon);
-student.addToCart(new Course(2, 'devops fundamentals', 'content'));
-student.addToCart(new Course(1, 'Backend basics', 'content'));
+student.addToCart(new Course('devops fundamentals', 'devops fundamentals', 'content'));
+student.addToCart(new Course('Backend basics', 'Backend basics', 'content'));
 student.checkout();
 student.activeSubscription();
